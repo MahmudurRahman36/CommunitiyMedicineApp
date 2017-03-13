@@ -1,0 +1,135 @@
+﻿@using CommunitiyMedicineApp.Models
+@model CommunitiyMedicineApp.Models.DiseaseDate
+@{
+    Layout = null;
+    //ViewBag.DistrictList
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <link href="~/css/sidebar.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        var temp1 = '@ViewBag.Data';
+        var chartData = JSON.parse('@ViewBag.Data');
+        console.log(data);
+    </script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['bar'] });
+        google.charts.setOnLoadCallback(drawStuff);
+
+        function drawStuff() {
+            var data = new google.visualization.arrayToDataTable(chartData);
+
+            var options = {
+                title: 'District wise disease report',
+                width: 900,
+                legend: { position: 'none' },
+                chart: { subtitle: 'Number of paitent vs disease' },
+                axes: {
+                    x: {
+                        0: { side: 'top', label: 'Diseases Name' } // Top x-axis.
+                    },
+
+                    y: {
+                        0: { side: 'left', label: 'Number of Patient' } // Top x-axis.
+                    }
+
+                },
+                bar: { groupWidth: "90%" }
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+            // Convert the Classic options to Material options.
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        };
+    </script>
+</head>
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="@Url.Action("Index", "Home")">Home</a>
+        <hr />
+        <a href="@Url.Action("MedicineEntry", "HeadOffice")">Medicine Setup</a>
+        <hr />
+        <a href="@Url.Action("DiseaseEntry", "HeadOffice")">Disease Setup</a>
+        <hr />
+        <a href="@Url.Action("CenterEntry", "HeadOffice")">Create Center</a>
+        <hr />
+        <a href="@Url.Action("SendMedicine", "HeadOffice")">Send Medicine</a>
+        <hr />
+
+        <a href="@Url.Action("DiseaseWiseReport", "HeadOffice")">Diseasewise Report</a>
+        <hr />
+
+        <a href="@Url.Action("DiseasesDemographicReport", "HeadOffice")">Demographic Report</a>
+        <hr />
+
+        <a href="@Url.Action("DiseaseBarChartReport", "HeadOffice")">Disease Bar Chart</a>
+        <hr />
+    </div>
+    <div align="center" id="main">
+        <span style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776; Menu</span>
+        <h1>Community Medicine Automation</h1>
+        <h2>Disease Bar Chart Report</h2>
+        @*<h4>@ViewBag.Data</h4>*@
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+            <table>
+                <tr>
+                    <td><label>Select District</label></td>
+                    <td>@Html.DropDownListFor(c => c.districtId, ViewBag.DistrictList as IEnumerable<SelectListItem>, "Select...")</td>
+                    <td>
+                        <input type="submit" id="show" name="show" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Date Between</label></td>
+                    <td>@Html.TextBoxFor(c => c.BeginDateTime, new { id = "pickyDate" })</td>
+                    <td><label>to</label></td>
+                    <td>@Html.TextBoxFor(c => c.EndDateTime, new { id = "pickyDate1" })</td>
+                </tr>
+            </table>
+        }
+        <div id="top_x_div" style="width: 900px; height: 500px;"></div>
+    </div>
+
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#pickyDate').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            $('#pickyDate1').datepicker({
+                format: "yyyy-mm-dd"
+            });
+        });
+        //$(function () {
+        //    $('.datepicker').datepicker({
+        //        format: 'mm-dd-yyyy'
+        //    });
+        //});
+    </script>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</body>
+</html>

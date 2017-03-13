@@ -1,0 +1,21 @@
+﻿@using CommunitiyMedicineApp.Models
+@model CommunitiyMedicineApp.Models.CenterPdf
+
+@{
+    ViewBag.Title = "Center Information";
+    CenterPdf centerPdf = ViewBag.CenterPdf;
+    Layout = null;
+}
+
+<h1 style="vertical-align: middle;">Center Information</h1>
+<br/>
+
+@*<a href="@Url.Action("ExportPdf","HeadOffice")">Export to Pdf</a>*@
+@if (centerPdf != null)
+{
+    <h2>District Name: @centerPdf.DistrictName</h2>
+<h2>Thana Name: @centerPdf.ThanaName</h2>
+<h2>Center Name: @centerPdf.CenterName</h2>
+<h2>Center Code: @centerPdf.Code</h2>
+<h2>Center Password: @centerPdf.Password</h2>
+}

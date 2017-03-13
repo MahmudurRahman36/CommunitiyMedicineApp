@@ -1,0 +1,131 @@
+﻿@using CommunitiyMedicineApp.Models
+
+@{
+    Layout = null;
+    PatientInfo patientInfo = ViewBag.PatientInfo;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <link href="~/css/sidebar.css" rel="stylesheet" />
+    <title>Histoy Of Patient</title>
+</head>
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="@Url.Action("Index", "Home")">Home</a>
+        <hr />
+        <a href="@Url.Action("Login", "CenterOffice")">Center Login</a>
+        <hr />
+        <a href="@Url.Action("SaveDoctor", "CenterOffice")">Doctor Entry</a>
+        <hr />
+        <a href="@Url.Action("MedicineStockReport", "CenterOffice")">Medicine Stock Report</a>
+        <hr />
+        <a href="@Url.Action("Treatment", "CenterOffice")">Treatment</a>
+        <hr />
+        <a href="@Url.Action("LogOff", "CenterOffice")">Logout</a>
+        <hr />
+
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+
+    <div align="center" id="main">
+        <span style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776; Menu</span>
+        <h1>Community Medicine Automation</h1>
+        <h2>Show All History</h2>
+        @if (ViewBag.PatientInfo != null)
+        {
+            <table>
+                <tr>
+                    <td>Voter Id No</td>
+                    <td><input type="text" name="VoterIdNo" id="VoterIdNo" value="@patientInfo.NIDno" /></td>
+                    <td>Name</td>
+                    <td><input type="text" name="Name" id="Name" value="@patientInfo.HdName" /></td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td><input type="text" name="Address" id="Address" value="@patientInfo.HdAddress" /></td>
+                </tr>
+            </table>
+        }
+
+        <table>
+            <tr>
+                <th>
+                    <label>History</label><label>:</label>
+                </th>
+                <th>
+                    <label>Center Name</label>
+                </th>
+                <th>
+                    <label>Thana Name</label>
+                </th>
+                <th>
+                    <label>District Name</label>
+                </th>
+                <th>
+                    <label>Date</label>
+                </th>
+                <th>
+                    <label>Doctor</label>
+                </th>
+                <th>
+                    <label>Disease</label>
+                </th>
+                <th>
+                    <label>Medicine</label>
+                </th>
+                <th>
+                    <label>Quantity</label>
+                </th>
+                <th>
+                    <label>Note</label>
+                </th>
+            </tr>
+            @{ int i = 1;}
+            @if (ViewBag.PatientHistorys != null)
+            {
+                foreach (PatientHistory patientHistory in ViewBag.PatientHistorys)
+                {
+                    <tr>
+                        <td><label>History</label><label>@i</label><label>:</label></td>
+                        @{ i = i + 1; };
+                        <td>@patientHistory.CenterName</td>
+                        <td>@patientHistory.ThanaName</td>
+                        <td>@patientHistory.DistrictName</td>
+                        <td>@patientHistory.DateTime</td>
+                        <td>@patientHistory.DoctorName</td>
+                        <td>@patientHistory.DiseaseName</td>
+                        <td>@patientHistory.MedicineName</td>
+                        <td>@patientHistory.Quantity</td>
+                        <td>@patientHistory.Note</td>
+                    </tr>
+                }
+            }
+        </table>
+        <form>
+            <input type="button" value="Print this page" onclick="window.print()">
+        </form>
+    </div>
+    <script>
+    $(document).ready(function () {
+        $('#Name').attr("disabled", true);
+        $('#VoterIdNo').attr("disabled", true);
+        $('#Address').attr("disabled", true);
+    });
+    </script>
+</body>
+</html>

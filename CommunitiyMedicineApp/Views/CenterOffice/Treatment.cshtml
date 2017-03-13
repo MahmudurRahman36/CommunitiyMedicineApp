@@ -1,0 +1,319 @@
+﻿@using CommunitiyMedicineApp.Models
+@using CommunitiyMedicineApp.Models.Entity
+@model CommunitiyMedicineApp.Models.Entity.Treatment
+@{
+    Layout = null;
+    PatientInfo pInfo = ViewBag.personalInfo;
+    if (pInfo == null)
+    {
+        pInfo = new PatientInfo();
+        pInfo.NIDno = ".";
+        pInfo.HdName = ".";
+        pInfo.HdAddress = ".";
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <link href="~/css/sidebar.css" rel="stylesheet" />
+    <title>Treatment</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="@Url.Action("Index", "Home")">Home</a>
+        <hr />
+        <a href="@Url.Action("Login", "CenterOffice")">Center Login</a>
+        <hr />
+        <a href="@Url.Action("SaveDoctor", "CenterOffice")">Doctor Entry</a>
+        <hr />
+        <a href="@Url.Action("MedicineStockReport", "CenterOffice")">Medicine Stock Report</a>
+        <hr />
+        <a href="@Url.Action("Treatment", "CenterOffice")">Treatment</a>
+        <hr />
+        <a href="@Url.Action("LogOff", "CenterOffice")">Logout</a>
+        <hr />
+
+
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+
+    <div align="center" id="main">
+        <span style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776; Menu</span>
+        <h1>Community Medicine Automation</h1>
+
+        <h2>Treatment</h2>
+        @if (ViewBag.Message != null)
+        {
+            <h2>@ViewBag.Message</h2>
+        }
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+            <input type="hidden" id="CenterId" name="CenterId" value=@ViewBag.CenterId>
+            <table class="col-lg-11">
+                <tr>
+                    <td>
+                        @Html.LabelFor(c => c.VoterIdNo)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(c => c.VoterIdNo)
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(c => c.VoterIdNo)
+                    </td>
+                    <td>
+                        @*<a href="@Url.Action("GotoShowAllInformation", "CenterOffice", new { VoterIdNo = newData })" title="Edit"></a>*@
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(c => c.Name)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(c => c.Name)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(c => c.Address)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(c => c.Address)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(c => c.Age)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(c => c.Age)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(c => c.NumberTimeServiceGiven)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(c => c.NumberTimeServiceGiven, new { id = "ServiceGiven" })
+                    </td>
+                    <td>
+                        <label>times</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(c => c.Observation)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(c => c.Observation)
+                    </td>
+                    <td>
+                        @Html.LabelFor(c => c.DateTime)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(c => c.DateTime, new { id = "pickyDate" })
+                    </td>
+                    <td>
+                        @Html.LabelFor(a => a.DoctorId, "Doctor")
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(c => c.DoctorId, ViewBag.DoctorList as IEnumerable<SelectListItem>, "Select...")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Disease</label>
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(c => c.DiseaseId, ViewBag.DiseaseList as IEnumerable<SelectListItem>, "Select...")
+                    </td>
+                    <td>
+                        <label>Medicine</label>
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(c => c.MedicineId, ViewBag.MedicineList as IEnumerable<SelectListItem>, "Select...")
+                    </td>
+                    <td>
+                        @Html.LabelFor(c => c.Dose)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(c => c.Dose, ViewBag.DoseList as IEnumerable<SelectListItem>, "Select...")
+                    </td>
+                    <td>@Html.LabelFor(c => c.DoseTime)</td>
+                    <td>
+                        @Html.RadioButtonFor(c => c.DoseTime, "1") Before Meal
+                        @Html.RadioButtonFor(c => c.DoseTime, "2") After Meal
+                    </td>
+                    <td>@Html.ValidationMessageFor(c => c.DoseTime)</td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(c => c.Quantity)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(c => c.Quantity)
+                    </td>
+                    <td>
+                        @Html.LabelFor(c => c.Note)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(c => c.Note)
+                    </td>
+                    <td>
+                        <input type="submit" name="action:Treatment" id="add" value="Add" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.ValidationMessageFor(c => c.Observation)</td>
+                    <td>@Html.ValidationMessageFor(c => c.DateTime)</td>
+                    <td>@Html.ValidationMessageFor(c => c.DoctorId)</td>
+                    <td>@Html.ValidationMessageFor(c => c.DiseaseId)</td>
+                    <td>@Html.ValidationMessageFor(c => c.MedicineId)</td>
+                </tr>
+                <tr>
+                    <td>@Html.ValidationMessageFor(c => c.Dose)</td>
+                    <td>@Html.ValidationMessageFor(c => c.DoseTime)</td>
+                    <td>@Html.ValidationMessageFor(c => c.Quantity)</td>
+                    <td>@Html.ValidationMessageFor(c => c.Note)</td>
+                </tr>
+            </table>
+        }
+
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+            <input type="hidden" id="NIDno" name="NIDno" value="@pInfo.NIDno" />
+            <input type="hidden" id="HdName" name="HdName" value="@pInfo.HdName" />
+            <input type="hidden" id="HdAddress" name="HdAddress" value="@pInfo.HdAddress" />
+
+            <input type="submit" name="action:GotoShowAllInformation" id="show" value="show" />
+        }
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+            <br />
+            <br />
+            <table class="table table-bordered">
+                <tr>
+                    <th>Disease</th>
+                    <th>Medicine</th>
+                    <th>Dose</th>
+                    <th>Before/After Meal</th>
+                    <th>Given Quantity</th>
+                    <th>Note</th>
+                </tr>
+                @if (ViewBag.TreatmentList != null)
+                {
+                    foreach (AllInformationModel treatment in ViewBag.TreatmentList)
+                    {
+                        <tr>
+                            <td>@treatment.DiseaseName</td>
+                            <td>@treatment.MedicineName</td>
+                            <td>@treatment.Dose</td>
+                            <td>@treatment.DoseTimeName</td>
+                            <td>@treatment.Quantity</td>
+                            <td>@treatment.Note</td>
+                        </tr>
+                    }
+                }
+            </table>
+            <input type="submit" name="action:SaveTreatment" id="save" value="Save" />
+        }
+    </div>
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#Name').attr("disabled", true);
+            $('#Age').attr("disabled", true);
+            $('#Address').attr("disabled", true);
+            $('#ServiceGiven').attr("disabled", true);
+
+            $('#pickyDate').datepicker({
+                format: "yyyy-mm-dd"
+            });
+
+            $('#add').click(function () {
+                $('#Name').attr("disabled", false);
+                $('#Age').attr("disabled", false);
+                $('#Address').attr("disabled", false);
+                $('#ServiceGiven').attr("disabled", false);
+            });
+
+            $("#VoterIdNo").on("input", function (e) {
+                var voterIdNo = $('#VoterIdNo').val();
+                $('#NIDno').val(voterIdNo);
+                if (voterIdNo.length != 17) {
+                    //alert('test');
+                    var vdata = "<VIEW>";
+                    $("#Name").val(vdata);
+                    $("#Age").val(vdata);
+                    $("#Address").val(vdata);
+                    $("#ServiceGiven").val(vdata);
+                }
+
+                else {
+                    //alert('valueget');
+                    $("#Name").empty();
+                    $("#Age").empty();
+                    $("#Address").empty();
+                    $("#ServiceGiven").empty();
+                    $.ajax({
+                        type: 'POST',
+                        async: false,
+                        url: '@Url.Action("GetNoOfTreatment", "CenterOffice")',
+                        dataType: 'json',
+                        data: { voterId: $("#VoterIdNo").val() },
+                        success: function (data) {
+                            $('#ServiceGiven').val(data);
+                        },
+                        error: function (ex) {
+                            alert('Failed to retrieve ServiceGiven : ' + ex);
+                        }
+                    });
+
+                    $.ajax({
+                        type: 'get',
+                        url: 'http://dotnet.nerdcastlebd.com/Voter/Api/Voter/GetBy?',
+                        data: { voterId: voterIdNo },
+                        dataType: "json",
+                        async: false,
+                        success: function (data) {
+                            result = data;
+                        },
+                        error: function (data) {
+                            result = data;
+                        }
+                    });
+                    var name = result.Name;
+                    var age = result.Age;
+                    var address = result.Address;
+                    $("#Name").val(name);
+                    $("#Age").val(age);
+                    $("#Address").val(address);
+                    $("#HdName").val(name);
+                    $("#HdAddress").val(address);
+                    return false;
+                };
+            });
+        });
+    </script>
+
+</body>
+</html>

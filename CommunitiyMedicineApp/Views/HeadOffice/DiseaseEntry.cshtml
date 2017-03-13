@@ -1,0 +1,170 @@
+﻿@using CommunitiyMedicineApp.Models
+@using CommunitiyMedicineApp.Models.Entity
+@model CommunitiyMedicineApp.Models.Entity.Disease
+
+@{
+    Layout = null;
+    string saveConfirmMsg = ViewBag.SaveConfirmMsg;
+    List<Disease> diseases = ViewBag.DiseaseList;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DiseaseDetails</title>
+    <link href="~/css/sidebar.css" rel="stylesheet" />
+    <style>
+        .field-validation-error {
+            color: red;
+            /*display: block;*/
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="@Url.Action("Index", "Home")">Home</a>
+        <hr />
+        <a href="@Url.Action("MedicineEntry", "HeadOffice")">Medicine Setup</a>
+        <hr />
+        <a href="@Url.Action("DiseaseEntry", "HeadOffice")">Disease Setup</a>
+        <hr />
+        <a href="@Url.Action("CenterEntry", "HeadOffice")">Create Center</a>
+        <hr />
+        <a href="@Url.Action("SendMedicine", "HeadOffice")">Send Medicine</a>
+        <hr />
+
+        <a href="@Url.Action("DiseaseWiseReport", "HeadOffice")">Diseasewise Report</a>
+        <hr />
+
+        <a href="@Url.Action("DiseasesDemographicReport", "HeadOffice")">Demographic Report</a>
+        <hr />
+
+        <a href="@Url.Action("DiseaseBarChartReport", "HeadOffice")">Disease Bar Chart</a>
+        <hr />
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+
+<div align="center" id="main">
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
+    <h1>Community Medicine Automation</h1>
+    <h2>Disease Setup</h2>
+    
+
+    <fieldset style="display: inline-block">
+        <legend>
+            Basic Disease Setup
+        </legend>
+        <h3>@saveConfirmMsg</h3>
+        <form id="SaveDisease" method="POST">
+            <table>
+                <tr>
+                    <td>
+                        @Html.LabelFor(c => c.Name)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(c => c.Name)
+                        @Html.ValidationMessageFor(c => c.Name)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(c => c.Description)
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(c => c.Description)
+                        @Html.ValidationMessageFor(c => c.Description)
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(c => c.TProcedure)
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(c => c.TProcedure)
+                        @Html.ValidationMessageFor(c => c.TProcedure)
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(c => c.PDrugs)
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(c => c.PDrugs)
+                        @Html.ValidationMessageFor(c => c.PDrugs)
+                    </td>
+
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" name="save" value="Save"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </fieldset>
+    <br/>
+    <br/>
+
+    @if (diseases != null)
+    {
+        <table border="1px">
+            <tr>
+                <th>SI</th>
+                <th>Disease Name</th>
+                <th>Description</th>
+                <th>Treatment Procedure</th>
+                <th>Prefered Drugs</th>
+            </tr>
+            @{
+                int si = 1;
+            }
+            @foreach (Disease d in diseases)
+            {
+                <tr>
+                    <td>
+                        @si
+                    </td>
+                    <td>
+                        @d.Name
+                    </td>
+                    <td>
+                        @d.Description
+                    </td>
+                    <td>
+                        @d.TProcedure
+                    </td>
+                    <td>
+                        @d.PDrugs
+                    </td>
+                </tr>
+                si++;
+            }
+
+        </table>
+    }
+
+</div>
+
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>
+

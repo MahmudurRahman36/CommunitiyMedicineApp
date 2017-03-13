@@ -1,0 +1,80 @@
+﻿@model dynamic
+@using CommunitiyMedicineApp.Models
+
+@{
+    Layout = null;
+    ViewBag.Title = "Treatment Document";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link href="~/css/sidebar.css" rel="stylesheet" />
+    <title>Treatment Document</title>
+    <link href="~/css/sidebar.css" rel="stylesheet"/>
+</head>
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="@Url.Action("Index", "Home")">Home</a>
+        <hr />
+        <a href="@Url.Action("Login", "CenterOffice")">Center Login</a>
+        <hr />
+        <a href="@Url.Action("SaveDoctor", "CenterOffice")">Doctor Entry</a>
+        <hr />
+        <a href="@Url.Action("MedicineStockReport", "CenterOffice")">Medicine Stock Report</a>
+        <hr />
+        <a href="@Url.Action("Treatment", "CenterOffice")">Treatment</a>
+        <hr />
+        <a href="@Url.Action("LogOff", "CenterOffice")">Logout</a>
+        <hr />
+        
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+
+<div align="center" id="main">
+    <span style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776; Menu</span>
+    <h1>Community Medicine Automation</h1>
+    <h2>Treatment Document</h2>
+    <h3>Patient Voter Id no is: @ViewBag.VoterIdNo</h3>
+    <table>
+        <tr>
+            <th>Disease</th>
+            <th>Medicine</th>
+            <th>Dose</th>
+            <th>Before/After Meal</th>
+            <th>Given Quantity</th>
+            <th>Note</th>
+        </tr>
+        @if (ViewBag.TreatmentList != null)
+        {
+            foreach (AllInformationModel treatment in ViewBag.TreatmentList)
+            {
+                <tr>
+                    <td>@treatment.DiseaseName</td>
+                    <td>@treatment.MedicineName</td>
+                    <td>@treatment.Dose</td>
+                    <td>@treatment.DoseTimeName</td>
+                    <td>@treatment.Quantity</td>
+                    <td>@treatment.Note</td>
+                </tr>
+            }
+        }
+    </table>
+    <form>
+        <input type="button" value="Print this page" onclick="window.print()">
+    </form>
+</div>
+</body>
+</html>

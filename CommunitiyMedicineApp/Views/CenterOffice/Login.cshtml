@@ -1,0 +1,113 @@
+﻿@model CommunitiyMedicineApp.Models.Entity.Center
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <link href="~/css/sidebar.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width"/>
+    <title>Login</title>
+</head>
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="@Url.Action("Index", "Home")">Home</a>
+        <hr />
+        <a href="@Url.Action("Login", "CenterOffice")">Center Login</a>
+        <hr />
+        <a href="@Url.Action("SaveDoctor", "CenterOffice")">Doctor Entry</a>
+        <hr />
+        <a href="@Url.Action("MedicineStockReport", "CenterOffice")">Medicine Stock Report</a>
+        <hr />
+        <a href="@Url.Action("Treatment", "CenterOffice")">Treatment</a>
+        <hr/>
+        <a href="@Url.Action("LogOff", "CenterOffice")">Logout</a>
+        <hr />
+
+
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+
+    <div align="center" id="main">
+        <span style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776; Menu</span>
+        <h1>Community Medicine Automation</h1>
+        
+        <h2>Welcome to Center Login Portal</h2>
+    </div>
+<div class="Container" align="center" style="padding-top: 20px">
+    <br/><br/>
+    <h2>Login Here</h2>
+    <br/><br/>
+
+    @using (Html.BeginForm(FormMethod.Post))
+    {
+        <table>
+
+
+            <tr style="height: 25px; font-size: 20px">
+                <td>@Html.LabelFor(a => a.Code, "Center Code")</td>
+                <td style="width: 200px; text-align: right">@Html.TextBoxFor(a => a.Code)</td>
+
+            </tr>
+
+            <tr>
+                <td colspan="2" style="text-align: right; height: 20px; font-size: 15px; color: red">
+                    @Html.ValidationMessageFor(a => a.Code)
+                </td>
+            </tr>
+
+            <tr style="height: 25px; font-size: 20px">
+                <td>@Html.LabelFor(a => a.Password)</td>
+                <td style="width: 200px; text-align: right">@Html.PasswordFor(a => a.Password)</td>
+
+            </tr>
+
+            <tr>
+                <td colspan="2" style="text-align: right; height: 20px; font-size: 15px; color: red">
+                    @Html.ValidationMessageFor(a => a.Password)
+
+                </td>
+            </tr>
+
+
+            <tr>
+                <td></td>
+                <td style="text-align: right">
+                    <input id="loginButton" type="submit" value="Log In" style="background-color: indianred; width: 95px; height: 30px; font-weight: bold; border-radius: 5px; font-size: 15px; color: bisque"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" style="text-align: right; height: 50px; font-size: 20px; color: red">
+                    <br/><br/>
+                    @if (ViewBag != null)
+                    {
+                        @ViewBag.Message
+                    }
+                </td>
+            </tr>
+
+        </table>
+    }
+
+</div>
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>
