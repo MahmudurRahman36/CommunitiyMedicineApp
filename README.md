@@ -1,2 +1,2 @@
-# CommunitiyMedicineApp
-Communitiy Medicine App
+# CommunitityMedicineApp
+Communitity Medicine App
