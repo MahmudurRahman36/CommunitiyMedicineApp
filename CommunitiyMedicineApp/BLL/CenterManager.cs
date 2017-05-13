@@ -87,7 +87,7 @@ namespace CommunitiyMedicineApp.BLL
                 patientHistory.ThanaName = headGateway.GetThanaNameById(center.ThanaId);
                 patientHistory.Quantity = treatment.Quantity;
                 patientHistory.Note = treatment.Note;
-                patientHistory.DateTime = (treatment.DateTime).ToString(); ;
+                patientHistory.DateTime = (treatment.TodayDateTime).ToString(); ;
                 patientHistories.Add(patientHistory);
             }
             return patientHistories;

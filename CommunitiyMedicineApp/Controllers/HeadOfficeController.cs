@@ -37,26 +37,28 @@ namespace CommunitiyMedicineApp.Controllers
         [HttpPost]
         public ActionResult MedicineEntry(Medicine medicine)
         {
-            if (ModelState.IsValid)
-            {
-                string saveConfirmMsg;
-                if (headManager.IsMedicineExist(medicine.GenericName, medicine.MgMl))
-                {
-                    saveConfirmMsg = "Data already exist";
-                }
-                else if (headManager.SetMedicine(medicine))
-                {
-                    saveConfirmMsg = "Data Saved";
-                }
-                else
-                {
-                    saveConfirmMsg = "Data not Saved";
-                }
-                ViewBag.SaveConfirmMsg = saveConfirmMsg;
-            }
-
             List<Medicine> medicineList = headManager.GetMedicineList();
             ViewBag.MedicineList = medicineList;
+
+            if (!ModelState.IsValid)
+            {
+                return View(medicine);
+            }
+            string saveConfirmMsg;
+            if (headManager.IsMedicineExist(medicine.GenericName, medicine.MgMl))
+            {
+                saveConfirmMsg = "Data already exist";
+            }
+            else if (headManager.SetMedicine(medicine))
+            {
+                saveConfirmMsg = "Data Saved";
+            }
+            else
+            {
+                saveConfirmMsg = "Data not Saved";
+            }
+            
+            ViewBag.SaveConfirmMsg = saveConfirmMsg;
             return View();
         }
 
@@ -70,25 +72,27 @@ namespace CommunitiyMedicineApp.Controllers
         [HttpPost]
         public ActionResult DiseaseEntry(Disease disease)
         {
-            if (ModelState.IsValid)
-            {
-                if (headManager.IsDiseaseExist(disease.Name))
-                {
-                    ViewBag.SaveConfirmMsg = "Disease Name Already Exist";
-                }
-                else if (headManager.SetDisease(disease))
-                {
-                    ViewBag.SaveConfirmMsg = "Data saved";
-                }
-                else
-                {
-                    ViewBag.SaveConfirmMsg = "Data saved failed";
-                }
-
-            }
-
             List<Disease> diseaseList = headManager.GetDiseaseList();
             ViewBag.DiseaseList = diseaseList;
+
+            if (!ModelState.IsValid)
+            {
+                return View(disease);
+            }
+
+            if (headManager.IsDiseaseExist(disease.Name))
+            {
+                ViewBag.SaveConfirmMsg = "Disease Name Already Exist";
+            }
+            else if (headManager.SetDisease(disease))
+            {
+                ViewBag.SaveConfirmMsg = "Data saved";
+            }
+            else
+            {
+                ViewBag.SaveConfirmMsg = "Data saved failed";
+            }
+            
             return View();
         }
 
@@ -107,6 +111,12 @@ namespace CommunitiyMedicineApp.Controllers
             List<Thana> thanaList = headManager.GetThanaList();
             ViewBag.DistrictList = districtList;
             ViewBag.ThanaList = thanaList;
+
+            if (!ModelState.IsValid)
+            {
+                return View(aCenter);
+            }
+           
             bool doesCenterExits = headManager.IsCenterExist(aCenter);
             if (doesCenterExits)
             {
@@ -164,9 +174,15 @@ namespace CommunitiyMedicineApp.Controllers
         [HttpPost]
         public ActionResult DiseaseWiseReport(DiseaseDate diseaseDate)
         {
-            ViewBag.DiseaseWiseReport = headManager.GetDiseaseWiseReports(diseaseDate);
             var diseaseList = headManager.GetDiseaseList();
             ViewBag.DiseaseList = new SelectList(diseaseList, "Id", "Name");
+
+            if (!ModelState.IsValid)
+            {
+                return View(diseaseDate);
+            }
+            ViewBag.DiseaseWiseReport = headManager.GetDiseaseWiseReports(diseaseDate);
+            
             return View();
         }
 
@@ -192,10 +208,6 @@ namespace CommunitiyMedicineApp.Controllers
         [HeadOfficeController.MultipleButtonAttribute(Name = "action", Argument = "SendMedicine")]
         public ActionResult SendMedicine(SendMedicine sendMedicine)
         {
-            List<SendMedicine> sendMedicines = (Session["SendMedicine"]) as List<SendMedicine>;
-            sendMedicines.Add(sendMedicine);
-            Session["SendMedicine"] = sendMedicines;
-
             var districtList = headManager.GetDistrictList();
             ViewBag.DistrictList = new SelectList(districtList, "Id", "Name");
 
@@ -207,6 +219,17 @@ namespace CommunitiyMedicineApp.Controllers
 
             var medicineList = headManager.GetMedicineList();
             ViewBag.MedicineList = new SelectList(medicineList, "Id", "GenericName");
+
+            List<SendMedicine> sendMedicines = (Session["SendMedicine"]) as List<SendMedicine>;
+            ViewBag.SendMedicine = sendMedicines;
+
+            if (!ModelState.IsValid)
+            {
+                return View(sendMedicine);
+            }
+
+            sendMedicines.Add(sendMedicine);
+            Session["SendMedicine"] = sendMedicines;
 
             foreach (SendMedicine medicine in sendMedicines)
             {
@@ -234,9 +257,17 @@ namespace CommunitiyMedicineApp.Controllers
             ViewBag.MedicineList = new SelectList(medicineList, "Id", "GenericName");
 
             List<SendMedicine> sendMedicines = (Session["SendMedicine"]) as List<SendMedicine>;
-            int rowAffected = headManager.SaveSendMedicine(sendMedicines);
-            ViewBag.Message = "Medinice list is saved for sending ";
-            Session["SendMedicine"] = new List<SendMedicine>();
+            if (sendMedicines.Count!=0)
+            {
+                int rowAffected = headManager.SaveSendMedicine(sendMedicines);
+                ViewBag.Message = "Medinice list is saved for sending ";
+                Session["SendMedicine"] = new List<SendMedicine>();
+            }
+            else
+            {
+                ViewBag.Message = "Please add some Medinice first.";
+                Session["SendMedicine"] = new List<SendMedicine>();
+            }
             return View("SendMedicine");
         }
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
@@ -321,6 +352,10 @@ namespace CommunitiyMedicineApp.Controllers
         [HttpPost]
         public ActionResult DiseasesDemographicReport(DiseaseDate diseaseDate)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(diseaseDate);
+            }
             var DiseaseWiseReport = headManager.GetDiseaseWiseReports(diseaseDate);
             var diseaseList = headManager.GetDiseaseList();
             ViewBag.DiseaseList = new SelectList(diseaseList, "Id", "Name");
@@ -351,9 +386,13 @@ namespace CommunitiyMedicineApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult DiseaseBarChartReport(int DiseaseId, DateTime BeginDateTime, DateTime EndDateTime)
+        public ActionResult DiseaseBarChartReport(DiseaseDate diseaseDate)
         {
-            var districtWiseReport = headManager.GetPatientOfDiseaseIndisease(DiseaseId, BeginDateTime, EndDateTime);
+            if (!ModelState.IsValid)
+            {
+                return View(diseaseDate);
+            }
+            var districtWiseReport = headManager.GetPatientOfDiseaseIndisease(diseaseDate.DiseaseId, diseaseDate.BeginDateTime, diseaseDate.EndDateTime);
             var districtList = headManager.GetDistrictList();
             ViewBag.DistrictList = new SelectList(districtList, "Id", "Name");
             ArrayList headerData = new ArrayList { "Disease Name", "No of Patient" };

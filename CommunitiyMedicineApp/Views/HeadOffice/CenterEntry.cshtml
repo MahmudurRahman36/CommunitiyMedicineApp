@@ -66,7 +66,18 @@
         <legend>
             Create Center
         </legend>
-        <h4>@saveSuccessMsg</h4>
+        @if (ViewBag.saveConfirmMsg != null)
+{
+    string notificationMessage = ViewBag.saveConfirmMsg.ToString();
+    if (notificationMessage.Equals("Successful. Center information saved."))
+    {
+        <h3 style="color: green;">@notificationMessage</h3>
+    }
+    else
+    {
+        <h3 style="color: red;">@notificationMessage</h3>
+    }
+}
         <form id="CreateCenterForm" method="POST">
             <table>
                 <tr>

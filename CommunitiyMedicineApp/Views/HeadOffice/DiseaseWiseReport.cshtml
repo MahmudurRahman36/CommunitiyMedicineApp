@@ -1,4 +1,5 @@
 ﻿@using CommunitiyMedicineApp.Models
+@using Microsoft.Ajax.Utilities
 @model CommunitiyMedicineApp.Models.DiseaseDate
 @{
     Layout = null;
@@ -91,7 +92,10 @@
                 <tr>
                     <td>@diseaseWiseReport.DistrictName</td>
                     <td>@diseaseWiseReport.TotalPatients</td>
-                    <td>@diseaseWiseReport.PercentageOfPopulation</td>
+                    @{
+                var perOfPopulation = diseaseWiseReport.PercentageOfPopulation.ToString(".################");
+                    }
+                    <td>@perOfPopulation</td>
                 </tr>
             }
         }

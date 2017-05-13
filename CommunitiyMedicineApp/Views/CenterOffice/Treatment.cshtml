@@ -60,8 +60,16 @@
         <h2>Treatment</h2>
         @if (ViewBag.Message != null)
         {
-            <h2>@ViewBag.Message</h2>
-        }
+            string notificationMessage = ViewBag.Message.ToString();
+            if (notificationMessage.Equals("Treatment Information Successfully Saved"))
+    {
+        <h3 style="color: green;">@notificationMessage</h3>
+    }
+    else
+    {
+        <h3 style="color: red;">@notificationMessage</h3>
+    }
+}
         @using (Html.BeginForm(FormMethod.Post))
         {
             <input type="hidden" id="CenterId" name="CenterId" value=@ViewBag.CenterId>
@@ -123,10 +131,10 @@
                         @Html.TextBoxFor(c => c.Observation)
                     </td>
                     <td>
-                        @Html.LabelFor(c => c.DateTime)
+                        @Html.LabelFor(c => c.TodayDateTime)
                     </td>
                     <td>
-                        @Html.TextBoxFor(c => c.DateTime, new { id = "pickyDate" })
+                        @Html.TextBoxFor(c => c.TodayDateTime, new { id = "pickyDate" })
                     </td>
                     <td>
                         @Html.LabelFor(a => a.DoctorId, "Doctor")
@@ -180,7 +188,7 @@
                 </tr>
                 <tr>
                     <td>@Html.ValidationMessageFor(c => c.Observation)</td>
-                    <td>@Html.ValidationMessageFor(c => c.DateTime)</td>
+                    <td>@Html.ValidationMessageFor(c => c.TodayDateTime)</td>
                     <td>@Html.ValidationMessageFor(c => c.DoctorId)</td>
                     <td>@Html.ValidationMessageFor(c => c.DiseaseId)</td>
                     <td>@Html.ValidationMessageFor(c => c.MedicineId)</td>

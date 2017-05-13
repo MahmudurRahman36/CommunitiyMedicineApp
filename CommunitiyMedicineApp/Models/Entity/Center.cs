@@ -8,7 +8,6 @@ namespace CommunitiyMedicineApp.Models.Entity
 {
     public class Center
     {
-        [Required]
         public int Id { get; set; }
         [Required]
         [Display(Name = "Center Name")]

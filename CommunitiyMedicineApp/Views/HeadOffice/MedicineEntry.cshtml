@@ -68,7 +68,20 @@
             <legend>
                 Basic Medicine Setup
             </legend>
-            <h3>@saveConfirmMsg</h3>
+
+            @if (ViewBag.saveConfirmMsg != null)
+            {
+                string notificationMessage = ViewBag.saveConfirmMsg.ToString();
+                if (notificationMessage.Equals("Data Saved"))
+                {
+                    <h3 style="color: green;">@notificationMessage</h3>
+                }
+                else
+                {
+                    <h3 style="color: red;">@notificationMessage</h3>
+                }
+            }
+            
             <form id="SaveMedicine" method="POST">
                 <table>
                     <tr>

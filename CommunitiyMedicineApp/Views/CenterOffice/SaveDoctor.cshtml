@@ -138,10 +138,18 @@
 
                 <tr>
                     <td colspan="2" style="text-align: right; height: 50px; font-size: 20px; color: cadetblue">
-                        @if (ViewBag != null)
-                        {
-                            @ViewBag.Message
-                        }
+                        @if (ViewBag.Message != null)
+{
+    string notificationMessage = ViewBag.Message.ToString();
+    if (notificationMessage.Equals("Doctor information saved successfully."))
+    {
+        <h3 style="color: green;">@notificationMessage</h3>
+    }
+    else
+    {
+        <h3 style="color: red;">@notificationMessage</h3>
+    }
+}  
                     </td>
                 </tr>
 

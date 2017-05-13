@@ -183,7 +183,7 @@ namespace CommunitiyMedicineApp.DAL
         {
             CMAContext dbContext = new CMAContext();
             //var patientList = dbContext.Treatments.Where(c => c.CenterId == centerId).AsNoTracking().GroupBy(x => x.VoterIdNo).Select(x => x.First()).Select(x=>x.VoterIdNo).ToList();
-            var treatmentList = dbContext.Treatments.Where(c => c.CenterId == centerId && c.DiseaseId == diseaseId && c.DateTime>=fromDateTime && c.DateTime<=toDateTime).AsNoTracking().ToList();
+            var treatmentList = dbContext.Treatments.Where(c => c.CenterId == centerId && c.DiseaseId == diseaseId && c.TodayDateTime>=fromDateTime && c.TodayDateTime<=toDateTime).AsNoTracking().ToList();
             return treatmentList;
         }
         public int SaveSendMedicine(List<SendMedicine> sendMedicines)

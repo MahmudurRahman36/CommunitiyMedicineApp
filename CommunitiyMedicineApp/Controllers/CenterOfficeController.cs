@@ -42,6 +42,10 @@ namespace CommunitiyMedicineApp.Controllers
         [HttpPost]
         public ActionResult Login(Center aCenter)
         {
+            if (aCenter.Code==null||aCenter.Password==null)
+            {
+                return View(aCenter);
+            }
             if (centerManager.DoesCodeExist(aCenter.Code))
             {
                 aCenter = centerManager.GetCenterByLogIn(aCenter.Code, aCenter.Password);
@@ -70,6 +74,12 @@ namespace CommunitiyMedicineApp.Controllers
 
             if (User.Identity.IsAuthenticated && Session["centerLogin"] != null)
             {
+                ViewBag.Message = "Please Login First";
+                return RedirectToAction("Login");
+            }
+            if (Session["CenterId"] == null)
+            {
+                ViewBag.Message = "Please Login First";
                 return RedirectToAction("Login");
             }
             var centerList = centerManager.GetAllCenters();
@@ -81,14 +91,12 @@ namespace CommunitiyMedicineApp.Controllers
         [HttpPost]
         public ActionResult SaveDoctor(Doctor aDoctor)
         {
-            //Center center = Session["centerLogin"] as Center;
-            //aDoctor.CenterId = center.Id;
             if (ModelState.IsValid)
             {
                 int rowAffected = centerManager.SaveDoctor(aDoctor);
                 if (rowAffected > 0)
                 {
-                    ViewBag.Message = "Doctor information saved successfully!!! :)";
+                    ViewBag.Message = "Doctor information saved successfully.";
                 }
                 else
                 {
@@ -106,6 +114,12 @@ namespace CommunitiyMedicineApp.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["centerLogin"] != null)
             {
+                ViewBag.Message = "Please Login First";
+                return RedirectToAction("Login");
+            }
+            if (Session["CenterId"] == null)
+            {
+                ViewBag.Message = "Please Login First";
                 return RedirectToAction("Login");
             }
             int centerId = (int) Session["CenterId"];
@@ -118,6 +132,10 @@ namespace CommunitiyMedicineApp.Controllers
         public ActionResult Treatment()
         {
             if (User.Identity.IsAuthenticated && Session["centerLogin"] != null)
+            {
+                return RedirectToAction("Login");
+            }
+            if (Session["CenterId"] == null)
             {
                 return RedirectToAction("Login");
             }
@@ -168,7 +186,7 @@ namespace CommunitiyMedicineApp.Controllers
 
             ViewBag.TreatmentList = centerManager.GiveNameToTreatment(treatments);
             Session["TreatmentListPdf"] = centerManager.GiveNameToTreatment(treatments);
-            ViewBag.Message = "Data Successfully Passed";
+            ViewBag.Message = "Treatment Information Successfully Saved";
             PatientInfo patientInfo=new PatientInfo(){HdAddress = treatment.Address,HdName = treatment.Name,NIDno = treatment.VoterIdNo};
             ViewBag.personalInfo = patientInfo;
             ViewBag.CenterId = 5;
